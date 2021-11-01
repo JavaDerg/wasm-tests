@@ -9,4 +9,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 wee_alloc = "0.4.5"
-wasmer = "2.0.0"
+wasmi = "0.9.1"

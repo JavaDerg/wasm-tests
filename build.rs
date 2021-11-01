@@ -1,5 +1,5 @@
 fn main() {
-    std::process::Command::new("cargo")
+    if !std::process::Command::new("cargo")
         .args(&[
             "+nightly",
             "build",
@@ -8,8 +8,10 @@ fn main() {
             "--release",
         ])
         .current_dir("./hw/")
-        .spawn()
+        .status()
         .unwrap()
-        .wait()
-        .unwrap();
+        .success() {
+        panic!("Failed to compile hw");
+    }
+    println!("cargo:rerun-if-changed=hw/");
 }

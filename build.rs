@@ -4,7 +4,7 @@ fn main() {
             "+nightly",
             "build",
             "--target",
-            "wasm32-unknown-unknown",
+            "wasm32-wasi",
             "--release",
         ])
         .current_dir("./hw/")

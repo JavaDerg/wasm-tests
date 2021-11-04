@@ -3,11 +3,9 @@ name = "hw"
 version = "0.1.0"
 edition = "2018"
 
-[lib]
-path="src/lib.rs"
-crate-type = ["cdylib"]
+# [lib]
+# path= "src/main.rs"
+# crate-type = ["cdylib"]
 
 [dependencies]
-wee_alloc = "0.4.5"
-volatile = "0.4.4"
-nbody = { path = "../nbody" }
+# mimalloc = { version = "*", default-features = false }

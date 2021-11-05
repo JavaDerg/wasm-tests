@@ -1255,7 +1255,6 @@ name = "wasmfun"
 version = "0.1.0"
 dependencies = [
  "bytes",
- "rayon",
  "wasmer",
  "wasmer-wasi",
 ]

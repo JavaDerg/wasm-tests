@@ -3,40 +3,43 @@ use image::{RgbImage, ImageBuffer, DynamicImage};
 use image::imageops::FilterType;
 use std::ops::{Div, Mul, Add, Rem, Sub};
 
-const GRADIENT: [f64; 6] = [
-    0.23467 * 2.0,
-    0.19738,
-    0.11747,
-    0.04941,
-    0.01473,
-    0.0031
-];
+// const GRADIENT: &'static [f64] = &[
+//     0.23467 * 2.0,
+//     0.19738,
+//     0.11747,
+//     0.04941,
+//     0.01473,
+//     0.0031
+// ];
 
 struct Gradient {
-    pub data: Box<[f64]>
+    pub data: Box<[f64]>,
+    gradient: Box<[f64]>
 }
 
 impl Gradient {
     pub fn new(size: usize) -> Self {
+        let steps = size as f64 / 100.0;
         Self {
             data: vec![0.0; size].into_boxed_slice(),
+            gradient: (1..=steps.floor() as u32 + 1).map(|x| 1.0 / x as f64).collect::<Vec<_>>().into_boxed_slice(),
         }
     }
 
     pub fn push_pt(&mut self, pt: u32) {
         let pt = pt;
-        self.add_maybe(pt as isize, GRADIENT[0]);
-        for n in 0usize..6 {
-            self.add_maybe(pt as isize + n as isize, GRADIENT[n]);
-            self.add_maybe(pt as isize - n as isize, GRADIENT[n]);
+        self.add_maybe(pt as isize, self.gradient[0]);
+        for n in 0usize..self.gradient.len() {
+            self.add_maybe(pt as isize + n as isize, self.gradient[n]);
+            self.add_maybe(pt as isize - n as isize, self.gradient[n]);
         }
     }
 
     pub fn normalize(&mut self) -> usize {
         let _: Option<()> = (|| {
             let mut max = 0.0f64;
-            self.data.iter().for_each(|pt| max = max.max(pt.sqrt().sqrt()));
-            self.data.iter_mut().for_each(|pt| *pt = pt.sqrt().sqrt().div(max));
+            self.data.iter().for_each(|pt| max = max.max(*pt));
+            self.data.iter_mut().for_each(|pt| *pt = pt.div(max));
             Some(())
         })();
         self.data.len()
@@ -77,8 +80,8 @@ fn main() {
     let mut bytes = bytes::Bytes::from(std::fs::read("../samples_u32_le.bin").unwrap());
     let mut data = vec![];
     data.reserve(bytes.len() / 4);
-    while bytes.has_remaining() {
-        data.push((bytes.get_u32_le() as f64).sqrt() as u32);
+    while bytes.remaining() >= 4 {
+        data.push((bytes.get_u32_le() as f64).div(100.0) as u32);
     }
     println!("{}", data.len());
     let size = *data.iter().max().unwrap() as usize;

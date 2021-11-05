@@ -8,7 +8,6 @@ build = "build.rs"
 [dependencies]
 bytes = "1.1.0"
 wasmer-wasi = "2.0.0"
-rayon = "1.5.1"
 
 [dependencies.wasmer]
 version = "2.0.0"

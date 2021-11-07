@@ -4345,6 +4345,7 @@ dependencies = [
  "bevy",
  "bevy_prototype_lyon",
  "bytes",
+ "fastrand",
  "heron",
  "wasmer",
  "wasmer-wasi",

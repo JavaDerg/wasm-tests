@@ -1,15 +1,26 @@
-
 [package]
 name = "wasmfun"
 version = "0.1.0"
-edition = "2018"
+edition = "2021"
 build = "build.rs"
 
 [dependencies]
 bytes = "1.1.0"
 wasmer-wasi = "2.0.0"
+bevy = { version = "0.5", features = ["dynamic", "subpixel_glyph_atlas"] }
+heron = { version = "0.12", features = ["2d"] }
+bevy_prototype_lyon = "0.3"
 
 [dependencies.wasmer]
 version = "2.0.0"
 default-features = false
 features = ["wat", "default-llvm", "default-universal"]
+
+[patch.crates-io]
+bevy = { git = "https://github.com/post-rex/bevy", branch = "release-0.5.1" }
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.dev]
+opt-level = 1
